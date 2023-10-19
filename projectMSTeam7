@@ -1,0 +1,578 @@
+ng new projectMSTeam7
+
+cd projectMSTeam7
+
+npm i bootstrap --save
+
+
+
+#Inside the Angular.json
+#Add the this in the styles
+
+
+ "styles": [
+              "src/styles.css",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css"
+            ],
+
+
+
+
+#inside styles.css 
+#Paste the following code
+#this will apply the bootstrap into the angular app
+
+
+@import "node_modules/bootstrap/dist/css/bootstrap.min.css";
+
+
+
+#################################################################################################################################################
+
+
+
+#Create a service
+
+ng generate service proj
+
+
+#this will create service ts file alongside component files
+
+
+#check the url from swagger
+#we are doing all the work in get method
+########################################################################################################################################
+
+#inside proj.service.ts
+
+
+
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+// get all the data, update, delete, create
+@Injectable({
+  providedIn: 'root'
+})
+export class ProjService {
+
+  constructor(private httpClient: HttpClient) { }
+  getPosts(): Observable<any[]> {
+    return this.httpClient.get<any[]>(`https://localhost:44397/api/ProjectMS/api/Project/GetAll`);
+  }
+
+  createPost(p_id: number, p_name: string, p_code: string, company_name: string, manager_name: string, start_date: string, end_date: string, Status: string): Observable<any[]>{
+    return this.httpClient.get<any[]>("https://localhost:44397/api/ProjectMS/"+p_id+"/"+p_code+"/"+p_name+"/"+company_name+"/"+manager_name+"/"+start_date+"/"+end_date+"/"+Status);
+    // https://localhost:44397/api/ProjectMS/37/asdf/asdf/asdf/asfd/2022-12-12/2022-12-12/InProgressx
+    //$https://localhost:44397/api/ProjectMS/${p_id}/${p_code}/${p_name}/${company_name}/${manager_name}/${start_date}/${end_date}/${Status}
+  }
+
+
+  updatePost(p_id_u: number, p_name_u: string, p_code_u: string, company_name_u: string, manager_name_u: string, start_date_u: string, end_date_u: string, Status_u: string, dummy: string): Observable<any[]>{
+
+    
+    return this.httpClient.get<any[]>("https://localhost:44397/api/ProjectMS/"+p_id_u+"/"+p_code_u+"/"+p_name_u+"/"+company_name_u+"/"+manager_name_u+"/"+start_date_u+"/"+end_date_u+"/"+Status_u+"/"+dummy);
+    // https://localhost:44397/api/ProjectMS/37/asdf/asdf/asdf/asfd/2022-12-12/2022-12-12/InProgressx
+   
+    //https://localhost:44397/api/ProjectMS/45/abir/abir/abir/abir/2012-12-12/2022-12-12/abir/abir
+  }
+
+
+  deletePost(delete_id: number ): Observable<any[]>{
+
+    
+    return this.httpClient.get<any[]>("https://localhost:44397/api/ProjectMS/"+delete_id);
+    
+  }
+}
+
+
+
+
+
+
+
+
+
+
+###########################################################################################################################################################################
+
+
+
+
+##########    app.module.ts
+
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+
+import { ProjService } from './proj.service';
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+
+@NgModule({
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule,
+    FormsModule
+  ],
+  providers: [ProjService],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+
+
+
+###############################################################################################################################################
+
+
+
+
+#############    app.component.html
+
+
+
+<div class="row">
+
+  <!-- left part of the screen -->
+
+  <div class="col-md-4 first">
+    <div class="outerDiv">
+      <h3>Adding the new project data</h3>
+
+
+     
+        <div class="row">
+          <div class="col-md-4">
+            Project ID
+          </div>
+          <div class="col-md-8">
+            <input type="number" [(ngModel)]="p_id" name="p_id" class="form-control">
+          </div>
+        </div>
+
+
+        <div class="row">
+          <div class="col-md-4">
+            Project Code
+          </div>
+          <div class="col-md-8">
+            <input type="text" [(ngModel)]="p_code" name="p_code" class="form-control">
+          </div>
+        </div>
+
+
+
+        <div class="row">
+          <div class="col-md-4">
+            Project Name
+          </div>
+          <div class="col-md-8">
+            <input type="text" [(ngModel)]="p_name" name="p_name" class="form-control">
+          </div>
+        </div>
+
+
+
+        <div class="row">
+          <div class="col-md-4">
+            Company Name
+          </div>
+          <div class="col-md-8">
+            <input type="text" [(ngModel)]="company_name" name="company_name" class="form-control">
+          </div>
+        </div>
+
+
+
+        <div class="row">
+          <div class="col-md-4">
+            Manager Name
+          </div>
+          <div class="col-md-8">
+            <input type="text" [(ngModel)]="manager_name" name="manager_name" class="form-control">
+          </div>
+        </div>
+
+
+
+        <div class="row">
+          <div class="col-md-4">
+            Start Date
+          </div>
+          <div class="col-md-8">
+            <input type="date" [(ngModel)]="start_date" name="start_date" class="form-control">
+          </div>
+        </div>
+
+
+        <div class="row">
+          <div class="col-md-4">
+            End Date
+          </div>
+          <div class="col-md-8">
+            <input type="date" [(ngModel)]="end_date" name="end_date" class="form-control">
+          </div>
+        </div>
+
+
+        <div class="row">
+          <div class="col-md-4">
+            Status
+          </div>
+          <div class="col-md-8">
+            <select name="" id="" [(ngModel)]="Status" class="form-control">
+              <option value="onGoing">Ongoing</option>
+              <option value="notStarted">Not Started</option>
+              <option value="Finished">Finished</option>
+            </select>
+          </div>
+        </div>
+<!-- <input type="submit"  value="Save" (click)="createFun()"> -->
+
+        <div class="row">
+          <div class="col-md-6"></div>
+          <div class="col-md-6">
+            <button class="btn btn-secondary btn-sm" type="reset">Cancel</button>
+            <button class="btn btn-secondary btn-sm mx-2" type="submit" (click)="createFun()">Save</button>
+          </div>
+        </div>
+
+
+     
+      <br><br><br>
+
+      <h3>Update the old project data</h3>
+    
+        <div class="row">
+          <div class="col-md-4">
+            Project ID to change
+          </div>
+          <div class="col-md-8">
+            <input type="number" [(ngModel)]="p_id_u" class="form-control">
+          </div>
+        </div>
+
+
+        <div class="row">
+          <div class="col-md-4">
+            Project Code
+          </div>
+          <div class="col-md-8">
+            <input type="text" [(ngModel)]="p_code_u" class="form-control">
+          </div>
+        </div>
+
+
+
+        <div class="row">
+          <div class="col-md-4">
+            Project Name
+          </div>
+          <div class="col-md-8">
+            <input type="text" [(ngModel)]="p_name_u" class="form-control">
+          </div>
+        </div>
+
+
+
+        <div class="row">
+          <div class="col-md-4">
+            Company Name
+          </div>
+          <div class="col-md-8">
+            <input type="text" [(ngModel)]="company_name_u" class="form-control">
+          </div>
+        </div>
+
+
+
+        <div class="row">
+          <div class="col-md-4">
+            Manager Name
+          </div>
+          <div class="col-md-8">
+            <input type="text" [(ngModel)]="manager_name_u" class="form-control">
+          </div>
+        </div>
+
+
+
+        <div class="row">
+          <div class="col-md-4">
+            Start Date
+          </div>
+          <div class="col-md-8">
+            <input type="date" [(ngModel)]="start_date_u" class="form-control">
+          </div>
+        </div>
+
+
+        <div class="row">
+          <div class="col-md-4">
+            End Date
+          </div>
+          <div class="col-md-8">
+            <input type="date" [(ngModel)]="end_date_u" class="form-control">
+          </div>
+        </div>
+
+     
+
+        <div class="row">
+          <div class="col-md-4">
+            Status
+          </div>
+          <div class="col-md-8">
+            <select name="" id="" [(ngModel)]="Status_u" class="form-control">
+              <option value="onGoing">Ongoing</option>
+              <option value="notStarted">Not Started</option>
+              <option value="Finished">Finished</option>
+            </select>
+          </div>
+        </div>
+
+
+        <div class="row">
+          <div class="col-md-4">
+            Dummy
+          </div>
+          <div class="col-md-8">
+            <input type="text" [(ngModel)]="dummy" class="form-control">
+          </div>
+        </div>
+        <!-- <input type="submit"  value="Save" (click)="updateFun()"> -->
+        <div class="row">
+          <div class="col-md-6"></div>
+          <div class="col-md-6">
+            <button class="btn btn-secondary btn-sm" type="reset">Cancel</button>
+            <button class="btn btn-secondary btn-sm mx-2" type="submit" (click)="updateFun()">Update</button>
+          </div>
+        </div>
+
+     
+      <br><br><br>
+
+      <h3>Delete the project data</h3>
+      
+
+
+
+        <div class="row">
+          <div class="col-md-4">
+            Project ID to change
+          </div>
+          <div class="col-md-8">
+            <input type="number" [(ngModel)]="delete_id">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6"></div>
+          <div class="col-md-6">
+            <button class="btn btn-secondary btn-sm" type="reset">Cancel</button>
+            <button class="btn btn-secondary btn-sm mx-2" type="submit" (click) = "deleteFun()">Delete</button>
+          </div>
+        </div>
+    
+    </div>
+
+
+
+
+    <!-- right part of the screen -->
+
+  </div>
+
+  <div class="col-md-8 second">
+    <h3>Detail of all the projects</h3>
+    <div class="outerDiv">
+      <div class="row">
+        <div class="col-md-12">
+          <table class="table table-bordered">
+           
+              
+            <thead>
+              <tr>
+                <th>PrjID</th>
+                <th>Code</th>
+                <th>p_name</th>
+                <th>company_name</th>
+                <th>manager_name</th>
+                <th>start_date</th>
+                <th>end_date</th>
+                <th>status</th>
+            </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let s of projs">
+                <td>{{s.p_id}}</td>
+                <td>{{s.p_code}}</td>
+                <td>{{s.p_name}}</td>
+        
+                <td>{{s.company_name}}</td>
+                <td>{{s.manager_name}}</td>
+                <td>{{s.start_date}}</td>
+                <td>{{s.end_date}}</td>
+                <td>{{s.status}}</td>
+            </tr>
+            </tbody>
+            
+       
+          </table>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+############################################################################################################################################
+
+
+
+######################              app.component.css
+
+
+
+.first{
+    background-color: rgb(152, 252, 157);
+    
+}
+.second{
+    background-color: rgb(252, 152, 227);
+}
+
+
+
+
+###########################################################################################################################################
+
+
+######################            app.component.ts
+
+
+
+import { Component, OnInit } from '@angular/core';
+import { ProjService } from './proj.service';
+import { HttpClient } from '@angular/common/http';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent implements OnInit {
+  public projs: any[] = [{}];
+
+
+  //public p_id: string 
+
+  //
+  constructor(private proj: ProjService) {
+    this.proj.getPosts().subscribe((data: any[]) => {
+      this.projs = data;
+      console.log(data);
+    });
+  }
+
+
+
+
+  public p_id: number = 0;
+  public p_code: string = "";
+  public p_name: string = "";
+  public company_name: string = "";
+  public manager_name: string = "";
+  public start_date: string = "";
+  public end_date: string = "";
+  public Status: string = "";
+
+  createFun(): void{
+    this.proj.createPost(this.p_id, this.p_code, this.p_name, this.company_name, this.manager_name, this.start_date, this.end_date, this.Status).subscribe((data: any[]) => {
+      this.projs = data;
+      console.log(data);
+  });
+
+
+  
+  }
+
+
+
+ // p_id_u+"/"+p_code_u+"/"+p_name_u+"/"+company_name_u+"/"+manager_name_u+"/"+start_date_u+"/"+end_date_u+"/"+Status_u+"/"+dummy_u
+ public p_id_u: number = 0;
+ public p_code_u: string = "";
+ public p_name_u: string = "";
+ public company_name_u: string = "";
+ public manager_name_u: string = "";
+ public start_date_u: string = "";
+ public end_date_u: string = "";
+ public Status_u: string = "";
+  public dummy: string = "";
+ updateFun(): void{
+  this.proj.updatePost(this.p_id_u, this.p_code_u, this.p_name_u, this.company_name_u, this.manager_name_u, this.start_date_u, this.end_date_u, this.Status_u, this.dummy).subscribe((data: any[]) => {
+    this.projs = data;
+    console.log(data);
+});
+
+
+// this.proj.getPosts().subscribe((data: any[]) => {
+//   this.projs = data;
+//   console.log(data);
+// });
+}
+
+
+public delete_id: number = 0;
+deleteFun(): void{
+  this.proj.deletePost(this.delete_id).subscribe((data: any[]) => {
+    this.projs = data;
+    console.log(data);
+});
+
+
+// this.proj.getPosts().subscribe((data: any[]) => {
+//   this.projs = data;
+//   console.log(data);
+// });
+
+}
+
+
+
+  ngOnInit() { }
+
+}
+
+
+###########################################################################################################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
